@@ -27,7 +27,7 @@ export default (target) => {
         return this.getValue(vm, key.trim());
         // console.log(value);
       });
-      console.log(value);
+      // console.log(value);
       updaterFn && updaterFn(node, value);
     },
 

@@ -11,3 +11,5 @@ const vm = new Mvvm({
     }
   }
 });
+
+window.vm = vm;
