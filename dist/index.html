@@ -11,9 +11,10 @@
     <input type="text" v-model="message" />
     <p>总数：{{ count }}</p>
     <div>
-      <h1>{{ products.title }}</h1>
+      <h1 v-html="products.title"></h1>
+      <div v-text="products.content"></div>
       <div>{{products.content}}</div>
-      <p>{{ products.title }}{{ message }}</p>
+      <p>{{ products.title }}----{{ message }}</p>
     </div>
   </div>
 

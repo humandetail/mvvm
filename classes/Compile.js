@@ -89,8 +89,9 @@ class Compile {
         let exp = attr.value;
 
         // v-model -> model
-        let type = attrName.slice(2); // 取出属性名 'v-' 之后的内容
-        Compile.CompileUtils[type](node, this.vm, exp);
+        let dir = attrName.slice(2); // 取出属性名 'v-' 之后的内容
+        // Compile.CompileUtils[attrName](node, this.vm, exp);
+        Compile.CompileElementDirective(dir, node, this.vm, exp);
       }
     });
   }
@@ -105,7 +106,8 @@ class Compile {
     // console.log(textContent);
     // 如果有{{}}则处理
     if (Compile.tplReg.test(exp)) {
-      Compile.CompileUtils['text'](node, this.vm, exp);
+      // Compile.CompileUtils['text'](node, this.vm, exp);
+      Compile.CompileTextNode(node, this.vm, exp);
     }
   }
 }
