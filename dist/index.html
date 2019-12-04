@@ -7,7 +7,7 @@
   <title>MVVM</title>
 </head>
 <body>
-  <div id="app">
+  <section id="app">
     <input type="text" v-model="message" />
     <p>总数：{{ count }}</p>
     <div>
@@ -16,7 +16,13 @@
       <div>{{products.content}}</div>
       <p>{{ products.title }}----{{ message }}</p>
     </div>
-  </div>
+    <div>{{ a }} + {{ b }} = {{ sum }}</div>
+    <ul>
+      <li>FirstName：{{ firstName }}</li>
+      <li>lastName: {{ lastName }}</li>
+      <li>FullName：{{ fullName }}</li>
+    </ul>
+  </section>
 
   <script src="index-bundle.js"></script>
 </body>

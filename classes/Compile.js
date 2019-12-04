@@ -5,6 +5,7 @@ import CompileUtils from '../decorators/CompileUtils';
 @CompileUtils
 class Compile {
   constructor (el, vm) {
+    // 检测el
     this.el = this.isElementNode(el)
              ? el
              : document.querySelector(el);
@@ -12,11 +13,20 @@ class Compile {
     this.vm = vm;
 
     if (this.el) {
+      
+      // 触发beforeMount钩子
+      const beforeMount = vm.$options.beforeMount;
+      (beforeMount && !vm._isMounted) && beforeMount.call(vm);
+
       // 把el下所有节点放入到文档碎片中
       const docFragment = this.nodeToFragment(this.el);
 
       this.compile(docFragment);
       this.el.appendChild(docFragment);
+
+      // 触发mounted钩子
+      const mounted = vm.$options.mounted;
+      (mounted && !vm._isMounted) && mounted.call(vm);
     }
 
   }
@@ -90,7 +100,6 @@ class Compile {
 
         // v-model -> model
         let dir = attrName.slice(2); // 取出属性名 'v-' 之后的内容
-        // Compile.CompileUtils[attrName](node, this.vm, exp);
         Compile.CompileElementDirective(dir, node, this.vm, exp);
       }
     });
@@ -106,7 +115,6 @@ class Compile {
     // console.log(textContent);
     // 如果有{{}}则处理
     if (Compile.tplReg.test(exp)) {
-      // Compile.CompileUtils['text'](node, this.vm, exp);
       Compile.CompileTextNode(node, this.vm, exp);
     }
   }

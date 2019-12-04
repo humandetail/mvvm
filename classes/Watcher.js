@@ -1,6 +1,7 @@
 // 观察者
 
 import { Dep } from './Dep';
+import { getValue } from '../utils/valueTools';
 
 class Watcher {
   constructor (vm, exp, cb) {
@@ -12,22 +13,23 @@ class Watcher {
     this.value = this.get();
   }
 
+  /**
+   * 获取当前数据
+   * 通过这里面给Dep.target赋值
+   */
   get () {
     Dep.target = this;
-    let value = this.getValue(this.vm, this.exp);
+    let value = getValue(this.vm, this.exp);
     Dep.target = null;
     return value;
   }
 
-  getValue (vm, exp) {
-    exp = exp.split('.');
-    return exp.reduce((prev, next) => {
-      return prev[next];
-    }, vm.$data);
-  }
-
+  /**
+   * 更新数据，并执行设定的回调函数
+   */
   update () {
-    let newValue = this.getValue(this.vm, this.exp),
+    const vm = this.vm;
+    let newValue = getValue(vm, this.exp),
         oldValue = this.value;
         
     if (newValue !== oldValue) {

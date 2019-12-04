@@ -3,7 +3,8 @@
 import { Dep } from './Dep'
 
 class Observer {
-  constructor (data) {
+  constructor (data, vm) {
+    this.vm = vm;
     this.observe(data);
   }
 
@@ -44,6 +45,11 @@ class Observer {
           value = newValue;
           // 当数据发生变化时，设置的getter 和 setter会丢失
           _self.observe(newValue);
+
+          // 触发updated钩子
+          const updatedHook = _self.vm.$options.updated;
+          updatedHook && updatedHook.call(vm);
+
           // 数据发生改变，发布事件
           dep.notify();
         }

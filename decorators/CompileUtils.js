@@ -1,4 +1,5 @@
 import { Watcher } from '../classes/Watcher';
+import * as valueTools from '../utils/valueTools';
 
 export default (target) => {
 
@@ -18,7 +19,7 @@ export default (target) => {
         // 监听input事件
         node.addEventListener('input', (e) => {
           let newValue = e.target.value;
-          target.setValue(vm, exp, newValue);
+          valueTools.setValue(vm, exp, newValue);
         });
         break;
       case 'html':
@@ -36,7 +37,7 @@ export default (target) => {
       updaterFn && updaterFn(node, value);
     });
 
-    updaterFn && updaterFn(node, target.getValue(vm, exp));
+    updaterFn && updaterFn(node, valueTools.getValue(vm, exp));
   }
 
   /**
@@ -59,7 +60,7 @@ export default (target) => {
           new Watcher(vm, key.trim(), updateValue);
         }
 
-        return target.getValue(vm, key.trim());
+        return valueTools.getValue(vm, key.trim());
       });
 
       updaterFn && updaterFn(node, value);
@@ -82,37 +83,6 @@ export default (target) => {
     textUpdater (node, value) {
       node.textContent = value;
     }
-  }
-
-  /**
-   * 根据指定的表达式，从vm实例中获取相应的值
-   * @param { object } vm VM实例
-   * @param { string } exp 指定的表达式，如：message、message.a
-   * @returns vm实例中指定的值
-   */
-  target.getValue = (vm, exp) => {
-    // exp有可能是a.b.c这样的值
-    exp = exp.split('.');
-    return exp.reduce((prev, next) => {
-      return prev[next];
-    }, vm.$data);
-  }
-
-  /**
-   * 更新vm实例中的值
-   * @param { object } vm VM实例
-   * @param { string } exp 指定的表达式，如：message、message.a
-   * @param { any } 指定的值
-   * @returns newValue 
-   */
-  target.setValue = (vm, exp, newValue) => {
-    exp = exp.split('.');
-    return exp.reduce((prev, next, currentIndex) => {
-      if (currentIndex === exp.length - 1) {
-        return prev[next] = newValue;
-      }
-      return prev[next];
-    }, vm.$data);
   }
 
   // 查找{{xxxx}}的正则
